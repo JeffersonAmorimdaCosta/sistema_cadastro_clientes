@@ -37,14 +37,16 @@ def transferir_para_excel(nome, cpf, endereco, telefone):
     df.to_excel('cadastro_clientes.xlsx', index=False)
 
 # Exibir cliente
-def exibir_cliente(cpf):
-    df = 1
-    pesquisar_cpf = cpf
-    print()
-    linha_cliente = df[df['CLIENTE'].apply(lambda x: json.loads(x)['cpf'] if x else None) == pesquisar_cpf]
-    dados_cliente = json.loads(linha_cliente['CLIENTE'].values[0])
+def pesquisar_cliente(cpf: str):
+    df = ler_excel()
 
-    for key, dados in dados_cliente.items():
-        print(f'{key}: {dados}')
-    print(f'Data da última compra: {linha_cliente["ULTIMA COMPRA"].values[0]}')
-    print()
+    pesquisar_cpf = cpf
+    linha_cliente = df[df['CLIENTE'].apply(lambda x: json.loads(x)['cpf']) == pesquisar_cpf]
+
+    if not linha_cliente.empty:
+        dados_cliente = json.loads(linha_cliente['CLIENTE'].values[0])
+        return dados_cliente
+    
+    return None
+
+print(pesquisar_cliente('45646545'))
