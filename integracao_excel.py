@@ -48,5 +48,3 @@ def pesquisar_cliente(cpf: str):
         return dados_cliente
     
     return None
-
-print(pesquisar_cliente('45646545'))
