@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from integracao_excel import transferir_para_excel
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
 ctk.set_appearance_mode('System')
 ctk.set_default_color_theme('blue')
@@ -11,19 +11,29 @@ class App(ctk.CTk):
     def __init__(self) -> None:
         super().__init__()
         self.configuracao_layout()
-        self.aparencia()
-        self.sobrepostos()
+        self.criar_abas()
 
     def configuracao_layout(self):
         self.title('Gestão de Clientes')
         self.geometry('700x500')
         self.resizable(False, False)
 
-    def aparencia(self):
-        self.aparencia_label = ctk.CTkLabel(self, text='Tema', bg_color='transparent', text_color=['#000', '#fff']).place(x=50, y=430)
-        self.opcoes_aparencia = ctk.CTkOptionMenu(self, values=['Light', 'Dark', 'System'], command=self.mudar_aparencia).place(x=50, y=460)
+    def criar_abas(self):
 
-    def sobrepostos(self):
+        self.abas = ttk.Notebook(self)
+
+        self.aba_cadastrar = ttk.Frame(self.abas,)
+        self.aba_pesquisar = ttk.Frame(self.abas)
+
+        self.abas.add(self.aba_cadastrar, text="Cadastrar Clientes")
+        self.abas.add(self.aba_pesquisar, text="Pesquisar Clientes")
+
+        self.abas.pack(expand=1, fill='both')
+
+        self.sobrepostos_aba_cadastrar()
+        self.sobrepostos_aba_pesquisar()
+
+    def sobrepostos_aba_cadastrar(self):
 
          # Botões
 
@@ -45,7 +55,7 @@ class App(ctk.CTk):
 
         # Frames
 
-        frame_titulo = ctk.CTkFrame(self, width=700, height=50, corner_radius=0, bg_color='teal', fg_color='teal')
+        frame_titulo = ctk.CTkFrame(self.aba_cadastrar, width=700, height=50, corner_radius=0, bg_color='teal', fg_color='teal')
         frame_titulo.place(x=0, y=10)
 
         # Textos
@@ -53,19 +63,19 @@ class App(ctk.CTk):
         titulo = ctk.CTkLabel(frame_titulo, text='Gestão de Clientes', font=('Century Gothic bold', 24), text_color=['#000', '#fff'])
         titulo.place(relx=0.5, rely=0.5, anchor='center')
 
-        lb_aviso = ctk.CTkLabel(self, text='Preencha todos os campos corretamente!', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_aviso = ctk.CTkLabel(self.aba_cadastrar, text='Preencha todos os campos corretamente!', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_aviso.place(x=50, y=70)
 
-        lb_nome = ctk.CTkLabel(self, text='Nome:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_nome = ctk.CTkLabel(self.aba_cadastrar, text='Nome:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_nome.place(x=50, y=120)
 
-        lb_cpf = ctk.CTkLabel(self, text='CPF (só números):', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_cpf = ctk.CTkLabel(self.aba_cadastrar, text='CPF (só números):', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_cpf.place(x=400, y=120)
 
-        lb_endereco = ctk.CTkLabel(self, text='Endereço:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_endereco = ctk.CTkLabel(self.aba_cadastrar, text='Endereço:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_endereco.place(x=50, y=220)
 
-        lb_telefone = ctk.CTkLabel(self, text='Telefone com DDD (só números):', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_telefone = ctk.CTkLabel(self.aba_cadastrar, text='Telefone com DDD (só números):', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_telefone.place(x=350, y=220)
         
         # Variaveis de Texto
@@ -77,28 +87,37 @@ class App(ctk.CTk):
 
         # Entradas
         
-        entrada_nome = ctk.CTkEntry(self, width=300, textvariable=valor_nome, font=('Century Gothic bold', 15), fg_color='transparent')
+        entrada_nome = ctk.CTkEntry(self.aba_cadastrar, width=300, textvariable=valor_nome, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_nome.place(x=50, y=150)
 
-        entrada_cpf = ctk.CTkEntry(self, width=250, textvariable=valor_cpf, font=('Century Gothic bold', 15), fg_color='transparent')
+        entrada_cpf = ctk.CTkEntry(self.aba_cadastrar, width=250, textvariable=valor_cpf, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_cpf.place(x=400, y=150)
 
-        entrada_endereco = ctk.CTkEntry(self, width=250, textvariable=valor_endereco, font=('Century Gothic bold', 15), fg_color='transparent')
+        entrada_endereco = ctk.CTkEntry(self.aba_cadastrar, width=250, textvariable=valor_endereco, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_endereco.place(x=50, y=250)
 
-        entrada_telefone = ctk.CTkEntry(self, width=200, textvariable=valor_telefone, font=('Century Gothic Bold', 15), fg_color='transparent')
+        entrada_telefone = ctk.CTkEntry(self.aba_cadastrar, width=200, textvariable=valor_telefone, font=('Century Gothic Bold', 15), fg_color='transparent')
         entrada_telefone.place(x=350, y=250)
 
         # Botões
 
-        botao_cadastrar = ctk.CTkButton(self, width=200, height=50, text='Cadastrar', font=('Century Gothic Bold', 15), fg_color='teal', command=cadastrar)
+        botao_cadastrar = ctk.CTkButton(self.aba_cadastrar, width=200, height=50, text='Cadastrar', font=('Century Gothic Bold', 15), fg_color='teal', command=cadastrar)
         botao_cadastrar.place(x=250, y=340)
 
-        botao_limpar = ctk.CTkButton(self, width=110, height=30, text='Limpar', font=('Century Gothic bold', 15), fg_color='teal', command=limpar)
+        botao_limpar = ctk.CTkButton(self.aba_cadastrar, width=110, height=30, text='Limpar', font=('Century Gothic bold', 15), fg_color='teal', command=limpar)
         botao_limpar.place(x=470, y=360)
 
-    def mudar_aparencia(self, nova_aparencia):
-        ctk.set_appearance_mode(nova_aparencia)
+    def sobrepostos_aba_pesquisar(self):
+
+        # Frames
+
+        frame_titulo = ctk.CTkFrame(self.aba_pesquisar, width=700, height=50, corner_radius=0, bg_color='teal', fg_color='teal')
+        frame_titulo.place(x=0, y=10)
+
+        # Textos
+
+        titulo = ctk.CTkLabel(frame_titulo, text='Pesquisar Clientes', font=('Century Gothic bold', 24), text_color=['#000', '#fff'])
+        titulo.place(relx=0.5, rely=0.5, anchor='center')
 
     def enviar_dados(self):
         pass
