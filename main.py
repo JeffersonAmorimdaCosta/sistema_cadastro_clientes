@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from integracao_excel import transferir_para_excel, pesquisar_cliente
+from integracao_excel import transferir_para_excel, pesquisar_cliente, alterar_dados
 from tkinter import *
 from tkinter import messagebox, ttk
 
@@ -108,6 +108,32 @@ class App(ctk.CTk):
         botao_limpar.place(x=470, y=360)
 
     def sobrepostos_aba_pesquisar(self):
+        
+        def limpar():
+            valor_nome.set('')
+            valor_cpf.set('')
+            valor_endereco.set('')
+            valor_telefone.set('')
+
+        def salvar_dados():
+            nome = valor_nome.get()
+            cpf = valor_cpf.get()
+            endereco = valor_endereco.get()
+            telefone = valor_telefone.get()
+
+            resultado = alterar_dados(nome, cpf, endereco, telefone)
+
+            if resultado:
+                messagebox.showinfo('Sistema', 'Alterações feitas com sucesso.')
+            else:
+                messagebox.showerror('Sistema', 'CPF não encontrado.')
+
+            limpar()
+            
+        def alterar():
+            entrada_nome.configure(state='normal')
+            entrada_endereco.configure(state='normal')
+            entrada_telefone.configure(state='normal')
 
         def mostrar_dados(nome, endereco, telefone):
             valor_nome.set(nome)
@@ -116,6 +142,10 @@ class App(ctk.CTk):
         
         def procurar_cliente():
             cpf = valor_cpf.get()
+            if cpf == '':
+                messagebox.showinfo('Sistema', 'Digite um CPF') 
+                return
+            
             dict_dados = pesquisar_cliente(cpf)
 
             if dict_dados == None:
@@ -174,10 +204,10 @@ class App(ctk.CTk):
         botao_pesquisar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Pesquisar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
         botao_pesquisar.place(x=320, y=130)
 
-        botao_alterar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Alterar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
+        botao_alterar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Alterar', font=('Century Gothic bold', 15), fg_color='teal', command=alterar)
         botao_alterar.place(x=350, y=370)
 
-        botao_salvar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Salvar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
+        botao_salvar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Salvar', font=('Century Gothic bold', 15), fg_color='teal', command=salvar_dados)
         botao_salvar.place(x=470, y=370)
 
 

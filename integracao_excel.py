@@ -48,3 +48,22 @@ def pesquisar_cliente(cpf: str):
         return dados_cliente
     
     return None
+
+def alterar_dados(nome, cpf, endereco, telefone):
+    df = ler_excel()
+
+    pesquisar_cpf = cpf
+    linha_cliente = df[df['CLIENTE'].apply(lambda x: json.loads(x)['cpf']) == pesquisar_cpf]
+
+    if not linha_cliente.empty:
+        dados_cliente = json.loads(linha_cliente['CLIENTE'].values[0])
+        dados_cliente['nome'] = nome
+        dados_cliente['endereco'] = endereco
+        dados_cliente['telefone'] = telefone
+
+        df.at[0, 'CLIENTE'] = json.dumps(dados_cliente)
+
+        df.to_excel('cadastro_clientes.xlsx', index=False)
+        return True
+     
+    return False 
