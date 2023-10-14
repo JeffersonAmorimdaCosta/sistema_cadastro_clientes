@@ -161,24 +161,26 @@ class App(ctk.CTk):
         entrada_cpf.place(x=50, y=130)
 
         # Entradas mudança
-        entrada_nome = ctk.CTkEntry(self.aba_pesquisar, width=300, textvariable=valor_nome, font=('Century Gothic bold', 15), fg_color='transparent')
+        entrada_nome = ctk.CTkEntry(self.aba_pesquisar, width=300, textvariable=valor_nome, font=('Century Gothic bold', 15), fg_color='transparent', state='readonly')
         entrada_nome.place(x=50, y=230)
 
-        entrada_endereco = ctk.CTkEntry(self.aba_pesquisar, width =250, textvariable=valor_endereco, font=('Century Gothic bold', 15), fg_color='transparent')
+        entrada_endereco = ctk.CTkEntry(self.aba_pesquisar, width =250, textvariable=valor_endereco, font=('Century Gothic bold', 15), fg_color='transparent', state='readonly')
         entrada_endereco.place(x=50, y=300)
 
-        entrada_telefone = ctk.CTkEntry(self.aba_pesquisar, width=200, textvariable=valor_telefone, font=('Century Gothic Bold', 15), fg_color='transparent')
+        entrada_telefone = ctk.CTkEntry(self.aba_pesquisar, width=200, textvariable=valor_telefone, font=('Century Gothic Bold', 15), fg_color='transparent', state='readonly')
         entrada_telefone.place(x=50, y=370)
 
         # Botões
         botao_pesquisar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Pesquisar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
         botao_pesquisar.place(x=320, y=130)
 
+        botao_alterar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Alterar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
+        botao_alterar.place(x=350, y=370)
 
-        
+        botao_salvar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Salvar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
+        botao_salvar.place(x=470, y=370)
 
 
 app = App()
 app.mainloop()
 
- 
