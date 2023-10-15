@@ -46,7 +46,12 @@ class App(ctk.CTk):
 
     def sobrepostos_aba_cadastrar(self):
 
-         # Botões
+        # Botões
+        def limpar():
+            valor_nome.set('')
+            valor_cpf.set('')
+            valor_endereco.set('')
+            valor_telefone.set('')
 
         def cadastrar():
             nome = valor_nome.get()
@@ -58,21 +63,21 @@ class App(ctk.CTk):
                 messagebox.showerror('Sistema', 'Preencha todos os campos!')
                 return
             
-            if not len(cpf) == 11:
+            elif not len(cpf) == 11:
                 messagebox.showerror('Sistema', 'O CPF deve ter 11 dígitos!')
                 return
+            
+            confirmar = messagebox.askyesno('Sistema', f'Confirme o CPF: {cpf}\nO CPF após ser cadastrado não poderá ser alterado!')
 
-            if transferir_para_excel(nome=nome, cpf=cpf, endereco=endereco, telefone=telefone):
-                messagebox.showinfo('Sistema', 'Cliente cadastrado com sucesso!')
+            if confirmar:
+                if transferir_para_excel(nome=nome, cpf=cpf, endereco=endereco, telefone=telefone):
+                    messagebox.showinfo('Sistema', 'Cliente cadastrado com sucesso!')
+                    limpar()                
+                else:
+                    messagebox.showerror('Sistema', 'Ja existe cliente cadastrado com esse CPF.')
+                    valor_cpf.set('')
             else:
-                messagebox.showerror('Sistema', 'Ja existe cliente cadastrado com esse CPF.')
-            limpar()
-
-        def limpar():
-            valor_nome.set('')
-            valor_cpf.set('')
-            valor_endereco.set('')
-            valor_telefone.set('')
+                valor_cpf.set('')
 
         # Frames
 
@@ -90,13 +95,13 @@ class App(ctk.CTk):
         lb_nome = ctk.CTkLabel(self.aba_cadastrar, text='Nome:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_nome.place(x=50, y=120)
 
-        lb_cpf = ctk.CTkLabel(self.aba_cadastrar, text='CPF (só números):', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_cpf = ctk.CTkLabel(self.aba_cadastrar, text='CPF:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_cpf.place(x=400, y=120)
 
         lb_endereco = ctk.CTkLabel(self.aba_cadastrar, text='Endereço:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_endereco.place(x=50, y=220)
 
-        lb_telefone = ctk.CTkLabel(self.aba_cadastrar, text='Telefone com DDD (só números):', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
+        lb_telefone = ctk.CTkLabel(self.aba_cadastrar, text='Telefone com DDD:', font=('Century Gothic bold', 13), text_color=['#000', '#fff'])
         lb_telefone.place(x=350, y=220)
         
         # Variaveis de Texto
