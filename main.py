@@ -18,6 +18,17 @@ class App(ctk.CTk):
         self.geometry('700x500')
         self.resizable(False, False)
 
+    def verificar_letras(self, dado):
+        if dado.isalpha() or dado == '':
+            return True
+        return False
+
+    def verificar_numeros(self, dado):
+        if dado.isdigit() or dado == '':
+            return True
+        return False
+
+
     def criar_abas(self):
 
         self.abas = ttk.Notebook(self)
@@ -42,6 +53,10 @@ class App(ctk.CTk):
             cpf = valor_cpf.get()
             endereco = valor_endereco.get()
             telefone = valor_telefone.get()
+
+            if nome == '' or cpf == '' or endereco == '' or telefone == '': 
+                messagebox.showerror('Sistema', 'Preencha todos os campos!')
+                return
 
             transferir_para_excel(nome=nome, cpf=cpf, endereco=endereco, telefone=telefone)
             messagebox.showinfo('Sitema', 'Cliente cadastrado com sucesso!')
@@ -86,18 +101,23 @@ class App(ctk.CTk):
         valor_telefone = StringVar()
 
         # Entradas
-        
+        vcmd_letras = (self.aba_cadastrar.register(self.verificar_letras), '%P')
+        vcmd_numeros = (self.aba_cadastrar.register(self.verificar_numeros), '%P')
+
         entrada_nome = ctk.CTkEntry(self.aba_cadastrar, width=300, textvariable=valor_nome, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_nome.place(x=50, y=150)
+        entrada_nome.configure(validate='key', validatecommand=vcmd_letras)
 
         entrada_cpf = ctk.CTkEntry(self.aba_cadastrar, width=250, textvariable=valor_cpf, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_cpf.place(x=400, y=150)
+        entrada_cpf.configure(validate='key', validatecommand=vcmd_numeros)
 
         entrada_endereco = ctk.CTkEntry(self.aba_cadastrar, width=250, textvariable=valor_endereco, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_endereco.place(x=50, y=250)
 
         entrada_telefone = ctk.CTkEntry(self.aba_cadastrar, width=200, textvariable=valor_telefone, font=('Century Gothic Bold', 15), fg_color='transparent')
         entrada_telefone.place(x=350, y=250)
+        entrada_telefone.configure(validate='key', validatecommand=vcmd_numeros)
 
         # Botões
 
@@ -109,6 +129,11 @@ class App(ctk.CTk):
 
     def sobrepostos_aba_pesquisar(self):
         
+        def bloquear():
+            entrada_nome.configure(state='readonly')
+            entrada_endereco.configure(state='readonly')
+            entrada_telefone.configure(state='readonly')
+
         def limpar():
             valor_nome.set('')
             valor_cpf.set('')
@@ -129,6 +154,7 @@ class App(ctk.CTk):
                 messagebox.showerror('Sistema', 'CPF não encontrado.')
 
             limpar()
+            bloquear()
             
         def alterar():
             entrada_nome.configure(state='normal')
@@ -187,18 +213,25 @@ class App(ctk.CTk):
         lb_nome.place(x=50, y=200)
 
         # Entradas
+
+        vcmd_letras = (self.aba_pesquisar.register(self.verificar_letras), '%P')
+        vcmd_numeros = (self.aba_pesquisar.register(self.verificar_numeros), '%P')
+
         entrada_cpf = ctk.CTkEntry(self.aba_pesquisar, width=240, textvariable=valor_cpf, font=('Century Gothic bold', 15), fg_color='transparent')
         entrada_cpf.place(x=50, y=130)
+        entrada_cpf.configure(validate='key', validatecommand=vcmd_numeros)
 
         # Entradas mudança
         entrada_nome = ctk.CTkEntry(self.aba_pesquisar, width=300, textvariable=valor_nome, font=('Century Gothic bold', 15), fg_color='transparent', state='readonly')
         entrada_nome.place(x=50, y=230)
+        entrada_nome.configure(validate='key', validatecommand=vcmd_letras)
 
         entrada_endereco = ctk.CTkEntry(self.aba_pesquisar, width =250, textvariable=valor_endereco, font=('Century Gothic bold', 15), fg_color='transparent', state='readonly')
         entrada_endereco.place(x=50, y=300)
 
         entrada_telefone = ctk.CTkEntry(self.aba_pesquisar, width=200, textvariable=valor_telefone, font=('Century Gothic Bold', 15), fg_color='transparent', state='readonly')
         entrada_telefone.place(x=50, y=370)
+        entrada_telefone.configure(validate='key', validatecommand=vcmd_numeros)
 
         # Botões
         botao_pesquisar = ctk.CTkButton(self.aba_pesquisar, width=100, height=28, text='Pesquisar', font=('Century Gothic bold', 15), fg_color='teal', command=procurar_cliente)
