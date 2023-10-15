@@ -19,7 +19,7 @@ class App(ctk.CTk):
         self.resizable(False, False)
 
     def verificar_letras(self, dado):
-        if dado.isalpha() or dado == '':
+        if dado.replace(' ', '').isalpha() or dado == '':
             return True
         return False
 
@@ -57,9 +57,15 @@ class App(ctk.CTk):
             if nome == '' or cpf == '' or endereco == '' or telefone == '': 
                 messagebox.showerror('Sistema', 'Preencha todos os campos!')
                 return
+            
+            if not len(cpf) == 11:
+                messagebox.showerror('Sistema', 'O CPF deve ter 11 dígitos!')
+                return
 
-            transferir_para_excel(nome=nome, cpf=cpf, endereco=endereco, telefone=telefone)
-            messagebox.showinfo('Sitema', 'Cliente cadastrado com sucesso!')
+            if transferir_para_excel(nome=nome, cpf=cpf, endereco=endereco, telefone=telefone):
+                messagebox.showinfo('Sistema', 'Cliente cadastrado com sucesso!')
+            else:
+                messagebox.showerror('Sistema', 'Ja existe cliente cadastrado com esse CPF.')
             limpar()
 
         def limpar():

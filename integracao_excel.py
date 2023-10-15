@@ -17,25 +17,6 @@ def ler_excel():
     df = pd.read_excel(arquivo)
     return df
 
-# Transferindo para o excel
-def transferir_para_excel(nome, cpf, endereco, telefone):
-    df = ler_excel()
-    nome_cliente = nome
-    cpf_cliente = cpf
-    endereco_cliente = endereco 
-    valor_cliente = telefone
-
-    cliente = Cliente(nome_cliente, cpf_cliente, endereco_cliente, valor_cliente)
-    data = datetime.now()
-    data_cadastro = data.strftime("%Y-%m-%d %H:%M:%S")
-
-    cliente_json = json.dumps(cliente.__dict__)
-
-    novo_cliente = pd.DataFrame({'CLIENTE': [cliente_json], 'DATA CADASTRO': [data_cadastro]})
-
-    df = pd.concat([df, novo_cliente], ignore_index=True)
-    df.to_excel('cadastro_clientes.xlsx', index=False)
-
 # Exibir cliente
 def pesquisar_cliente(cpf: str):
     df = ler_excel()
@@ -48,6 +29,30 @@ def pesquisar_cliente(cpf: str):
         return dados_cliente
     
     return None
+
+# Transferindo para o excel
+def transferir_para_excel(nome, cpf, endereco, telefone):
+    df = ler_excel()
+    nome_cliente = nome
+    cpf_cliente = cpf
+    endereco_cliente = endereco 
+    valor_cliente = telefone
+
+    if not pesquisar_cliente(cpf_cliente):
+
+        cliente = Cliente(nome_cliente, cpf_cliente, endereco_cliente, valor_cliente)
+        data = datetime.now()
+        data_cadastro = data.strftime("%Y-%m-%d %H:%M:%S")
+
+        cliente_json = json.dumps(cliente.__dict__)
+
+        novo_cliente = pd.DataFrame({'CLIENTE': [cliente_json], 'DATA CADASTRO': [data_cadastro]})
+
+        df = pd.concat([df, novo_cliente], ignore_index=True)
+        df.to_excel('cadastro_clientes.xlsx', index=False)
+        return True    
+    
+    return False
 
 def alterar_dados(nome, cpf, endereco, telefone):
     df = ler_excel()
