@@ -67,7 +67,7 @@ class App(ctk.CTk):
                 messagebox.showerror('Sistema', 'O CPF deve ter 11 dígitos!')
                 return
             
-            confirmar = messagebox.askyesno('Sistema', f'Confirme o CPF: {cpf}\nO CPF após ser cadastrado não poderá ser alterado!')
+            confirmar = messagebox.askyesno('Sistema', f'Confirme o CPF: {cpf}\nO CPF após ser cadastrado não poderá ser alterado!\nDeseja continuar?')
 
             if confirmar:
                 if transferir_para_excel(nome=nome, cpf=cpf, endereco=endereco, telefone=telefone):
